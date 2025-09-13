@@ -1,73 +1,12 @@
-Crypto Fundamental Dashboard
-· typescript
-import { useState } from "react";
-      </table>
-    </div>
-  );
-}
-
-
-function CoinDetails() {
-  const { id } = useParams();
-  const coin = coins.find((c) => c.id === id);
-  if (!coin) return <div className="p-6">❌ Валутата не е намерена.</div>;
-  return (
-    <div className="p-6">
-      <h2 className="text-xl font-bold mb-4">{coin.name} ({coin.symbol})</h2>
-
-
-      {/* Новини */}
-      <h3 className="text-lg font-semibold mt-4 mb-2">📰 Официални новини</h3>
-      <ul className="list-disc pl-5 mb-4">
-        {coin.newsFeed.map((n, i) => (
-          <li key={i}>
-            <a href={n.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-              {n.title}
-            </a>
-          </li>
-        ))}
-      </ul>
-
-
-      {/* Ончейн графика */}
-      <h3 className="text-lg font-semibold mt-4 mb-2">📈 Ончейн данни (активни адреси)</h3>
-      <div className="w-full h-64 bg-white border rounded p-2">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={coin.onchainData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="value" stroke="#2563eb" strokeWidth={2} />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-
-
-      {/* Социално настроение (mock) */}
-      <h3 className="text-lg font-semibold mt-4 mb-2">💬 Социално настроение</h3>
-      <p className="mb-4">Fear & Greed Index: <span className="font-bold">65 (Greed)</span></p>
-
-
-      {/* Мрежова активност (mock) */}
-      <h3 className="text-lg font-semibold mt-4 mb-2">🌐 Мрежова активност</h3>
-      <p className="mb-4">GitHub комити (последна седмица): <span className="font-bold">152</span></p>
-      <p className="mb-4">DeFi TVL: <span className="font-bold">$1.2B</span></p>
-
-
-      <Link to="/" className="text-blue-600 hover:underline">⬅ Обратно</Link>
-    </div>
-  );
-}
-
-
-export default function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/coin/:id" element={<CoinDetails />} />
-      </Routes>
-    </Router>
-  );
-}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crypto Fundamental Dashboard</title>
+  </head>
+  <body class="bg-gray-100">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
