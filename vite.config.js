@@ -3,5 +3,5 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/crypto-fundamental-dashboard/", // <-- смени с името на твоето GitHub repo
+  base: "/funda/", // <-- смени с името на твоето GitHub repo
 });
