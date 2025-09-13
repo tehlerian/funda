@@ -1,86 +1,73 @@
-<!DOCTYPE html>
-<html lang="bg">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Фундаментален анализ — Крипто</title>
-  <style>
-    :root { --bg:#0f1115; --card:#161a22; --text:#e6e6e6; --muted:#a3a3a3; --accent:#60a5fa; }
-    body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto; background:var(--bg); color:var(--text) }
-    header{ padding:16px; background:#0c0f14; border-bottom:1px solid #202635; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap }
-    h1{ font-size:20px; margin:0 }
-    select{ background:var(--card); color:var(--text); border:1px solid #2a3142; border-radius:10px; padding:6px 10px }
-    main{ padding:16px; display:grid; grid-template-columns:1fr 1fr; gap:16px }
-    .card{ background:var(--card); border:1px solid #202635; border-radius:14px; padding:12px; min-height:200px }
-    .card h2{ margin:0 0 12px; font-size:16px; color:var(--muted) }
-    ul{ list-style:none; margin:0; padding:0 }
-    li{ padding:4px 0; font-size:14px }
-    .pos{ color:#22c55e; }
-    .neg{ color:#ef4444; }
-    .neutral{ color:var(--muted); }
-    .footnote{ margin-top:16px; color:var(--muted); font-size:12px; text-align:center }
-    @media(max-width:900px){ main{ grid-template-columns:1fr } }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Фундаментален анализ</h1>
-    <select id="coinSelect">
-      <option value="BTC">Bitcoin (BTC)</option>
-      <option value="ETH">Ethereum (ETH)</option>
-      <option value="BNB">BNB</option>
-    </select>
-  </header>
-
-  <main>
-    <div class="card">
-      <h2>Официални анонси / Новини</h2>
-      <ul id="news">
-        <li>📢 Binance обяви нов листинг за MEME (позитивно)</li>
-        <li>⚠️ SEC поднови делото срещу Ripple (негативно)</li>
-        <li>ℹ️ Fidelity ETF отчете рекорден приток (позитивно)</li>
-      </ul>
+Crypto Fundamental Dashboard
+· typescript
+import { useState } from "react";
+      </table>
     </div>
+  );
+}
 
-    <div class="card">
-      <h2>Ончейн данни</h2>
-      <ul id="onchain">
-        <li>Exchange outflow: <span class="pos">+12,300 BTC</span></li>
-        <li>Активни адреси: 980k (7д ↑)</li>
-        <li>Hashrate: 430 EH/s (рекорд)</li>
+
+function CoinDetails() {
+  const { id } = useParams();
+  const coin = coins.find((c) => c.id === id);
+  if (!coin) return <div className="p-6">❌ Валутата не е намерена.</div>;
+  return (
+    <div className="p-6">
+      <h2 className="text-xl font-bold mb-4">{coin.name} ({coin.symbol})</h2>
+
+
+      {/* Новини */}
+      <h3 className="text-lg font-semibold mt-4 mb-2">📰 Официални новини</h3>
+      <ul className="list-disc pl-5 mb-4">
+        {coin.newsFeed.map((n, i) => (
+          <li key={i}>
+            <a href={n.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+              {n.title}
+            </a>
+          </li>
+        ))}
       </ul>
+
+
+      {/* Ончейн графика */}
+      <h3 className="text-lg font-semibold mt-4 mb-2">📈 Ончейн данни (активни адреси)</h3>
+      <div className="w-full h-64 bg-white border rounded p-2">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={coin.onchainData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip />
+            <Line type="monotone" dataKey="value" stroke="#2563eb" strokeWidth={2} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
+
+      {/* Социално настроение (mock) */}
+      <h3 className="text-lg font-semibold mt-4 mb-2">💬 Социално настроение</h3>
+      <p className="mb-4">Fear & Greed Index: <span className="font-bold">65 (Greed)</span></p>
+
+
+      {/* Мрежова активност (mock) */}
+      <h3 className="text-lg font-semibold mt-4 mb-2">🌐 Мрежова активност</h3>
+      <p className="mb-4">GitHub комити (последна седмица): <span className="font-bold">152</span></p>
+      <p className="mb-4">DeFi TVL: <span className="font-bold">$1.2B</span></p>
+
+
+      <Link to="/" className="text-blue-600 hover:underline">⬅ Обратно</Link>
     </div>
+  );
+}
 
-    <div class="card">
-      <h2>Социално настроение</h2>
-      <ul id="social">
-        <li>Twitter: 35k поста (70% позитивни)</li>
-        <li>Reddit: 1.2k коментара (50/50)</li>
-        <li>Sentiment индекс: <span class="pos">65/100 (Bullish)</span></li>
-      </ul>
-    </div>
 
-    <div class="card">
-      <h2>Мрежова активност</h2>
-      <ul id="network">
-        <li>Транзакции (24h): 280k</li>
-        <li>Средна такса: $2.10</li>
-        <li>Нови адреси: 14k</li>
-      </ul>
-    </div>
-  </main>
-
-  <div class="footnote">Обновено: <span id="lastUpdated"></span></div>
-
-  <script>
-    function updateTime(){
-      document.getElementById("lastUpdated").textContent = new Date().toLocaleString();
-    }
-    updateTime();
-    setInterval(updateTime,60000);
-
-    // Тук по-късно ще добавим fetch() от API (CryptoPanic, Glassnode, LunarCrush, Etherscan)
-    // засега използваме статични (dummy) данни
-  </script>
-</body>
-</html>
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/coin/:id" element={<CoinDetails />} />
+      </Routes>
+    </Router>
+  );
+}
